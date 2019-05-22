@@ -1,0 +1,116 @@
+unit fprincipal;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls;
+
+type
+  Tf_principal = class(TForm)
+    Memo1: TMemo;
+    Memo2: TMemo;
+    Panel1: TPanel;
+    Button1: TButton;
+    procedure Button1Click(Sender: TObject);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  f_principal: Tf_principal;
+
+implementation
+
+{$R *.dfm}
+
+procedure Tf_principal.Button1Click(Sender: TObject);
+var
+    i,x,y,z,q,del:integer;
+    linha,
+    linha2,
+    comando,
+    deli,
+    breakp:string;
+begin
+     memo2.Lines.Clear;
+     linha2 := '';
+     breakp := ';';
+   for i := 0 to memo1.lines.Count -1 do
+   begin
+      linha:= memo1.Lines[i];
+
+      if Length(trim(linha)) > 0 then
+      begin
+        x := AnsiPos('/*' , linha);
+        y := AnsiPos('*/' , linha);
+        del := AnsiPos('DELIMITER',linha);
+
+          if (x > 0) then
+          begin
+              inc(z);
+          end;
+
+          if (y > 0) then
+          begin
+              dec(z);
+          end;
+
+
+          if del > 0 then
+          begin
+            linha := copy(linha, del, length(linha));
+
+            memo2.Lines.Add(linha);
+
+            breakp := copy(linha, length(linha), length(linha));
+          end
+          else
+          begin
+            if ((z = 0) and (x =0) and (y =0)) then
+            begin
+
+              q := AnsiPos(breakp, linha);
+
+              while (q > 0) do
+              begin
+
+                comando := comando + copy(linha,0,q+1);
+
+                linha := copy(linha,q+2,length(linha));
+
+                memo2.Lines.Add(comando);
+
+                memo2.Lines.Add('----------------------------------');
+
+                comando := '';
+
+                q := AnsiPos(breakp, linha);
+
+              end;
+
+              if q = 0 then
+              begin
+
+               memo2.Lines.Add(linha);
+
+              end;
+
+            end;
+          end;
+
+
+
+
+
+
+      end;
+   end;
+
+end;
+{x = numero de caracteres por linha
+ i = numero da linha}
+end.
